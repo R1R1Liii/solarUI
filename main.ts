@@ -45,9 +45,8 @@ function setupBoot () {
     game.showLongText("Let's set you up.", DialogLayout.Bottom)
     game.showLongText("Your device just got more personal with SolarShield.", DialogLayout.Bottom)
     game.showLongText("SolarShield is the built-in security framework of solarUI.", DialogLayout.Bottom)
-    game.showLongText("SolarShield enables on-device encryption for maxiumum security.", DialogLayout.Bottom)
-    game.showLongText("Your device is eligible for a encrypted PIN powered by SolarShield.", DialogLayout.Bottom)
-    game.showLongText("To skip this step, set the PIN length at 0.", DialogLayout.Bottom)
+    game.showLongText("SolarShield enables PIN login. Your credentials will be encrypted on-device.", DialogLayout.Bottom)
+    game.splash(game.askForNumber("Set your PIN length. 0 to skip PIN setup.", 1, true))
 }
 function debugTerminal (duration: number) {
     for (let index = 0; index < duration; index++) {
