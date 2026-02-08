@@ -41,28 +41,12 @@ function animationBoot () {
     for (let index = 0; index < 2; index++) {
         animation.runImageAnimation(
         animationBoot1,
-        [img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `],
+        assets.animation`systemAnimationBootMp4`,
         200,
         true
         )
     }
+    music.play(music.createSong(assets.song`systemBootMp3`), music.PlaybackMode.InBackground)
 }
 function debugTerminal (duration: number) {
     for (let index = 0; index < duration; index++) {
