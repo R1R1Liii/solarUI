@@ -10,7 +10,8 @@
         "arcade-sprite-util": "github:jwunderl/arcade-sprite-util#v0.5.0",
         "arcade-mini-menu": "github:riknoll/arcade-mini-menu#v0.0.1",
         "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.2",
-        "animation": "*"
+        "animation": "*",
+        "encryption extension": "github:Dumb-Dumb1/arcade-encryption#v4.2.2"
     },
     "files": [
         "main.blocks",

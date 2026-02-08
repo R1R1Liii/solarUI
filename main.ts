@@ -1,3 +1,23 @@
+function setupBoot1 () {
+    game.showLongText("Let's set you up.", DialogLayout.Bottom)
+    game.showLongText("Your device just got more personal with SolarShield.", DialogLayout.Bottom)
+    game.showLongText("SolarShield is the built-in security framework of solarUI.", DialogLayout.Bottom)
+    game.showLongText("SolarShield enables PIN login. Your credentials will be encrypted on-device.", DialogLayout.Bottom)
+    systemPinLength = game.askForNumber("Set your PIN length. 0 to skip PIN setup.", 1, true)
+    if (systemPinLength >= 4 && systemPinLength != 0) {
+        blockSettings.writeNumber("systemPin", game.askForNumber("Set your PIN. Avoid using patterns or repeating numbers.", systemPinLength, true))
+        game.showLongText("PIN set as " + blockSettings.readString("systemPin"), DialogLayout.Bottom)
+        setupBoot2()
+    } else {
+        if (systemPinLength == 0) {
+            setupBoot2()
+        } else {
+            game.showLongText("PIN is too short. Your PIN must be at least 4 digits for effective security.", DialogLayout.Bottom)
+            game.showLongText("The setup process will be restarted for maxiumum security.", DialogLayout.Bottom)
+            setupBoot1()
+        }
+    }
+}
 function enableCursor (en: boolean) {
     if (en) {
         controller.moveSprite(systemCursorPointer, 100, 100)
@@ -16,44 +36,23 @@ function renderCursor () {
     enableCursor(true)
 }
 function animationBoot () {
+    animationBoot1 = sprites.create(assets.image`animationEmpty`, SpriteKind.Player)
     animationBoot1.setPosition(75, 75)
-    animation.runImageAnimation(
-    animationBoot1,
-    [img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `],
-    200,
-    true
-    )
-}
-function setupBoot () {
-    game.showLongText("Let's set you up.", DialogLayout.Bottom)
-    game.showLongText("Your device just got more personal with SolarShield.", DialogLayout.Bottom)
-    game.showLongText("SolarShield is the built-in security framework of solarUI.", DialogLayout.Bottom)
-    game.showLongText("SolarShield enables PIN login. Your credentials will be encrypted on-device.", DialogLayout.Bottom)
-    game.splash(game.askForNumber("Set your PIN length. 0 to skip PIN setup.", 1, true))
+    for (let index = 0; index < 2; index++) {
+        animation.runImageAnimation(
+        animationBoot1,
+        assets.animation`systemBootAnimation`,
+        200,
+        true
+        )
+    }
 }
 function debugTerminal (duration: number) {
     for (let index = 0; index < duration; index++) {
         if (controller.A.isPressed() && controller.menu.isPressed()) {
             userInput = game.askForString("Enter function name", 12, false)
             if (userInput == "setupBoot") {
-                setupBoot()
+                setupBoot1()
             }
         }
         // pause expects milliseconds as integer
@@ -65,6 +64,7 @@ function boot () {
     textSetup2b2 = textsprite.create("solarUI Core", 15, 8)
     textSetup2b2.setPosition(45, 45)
     textSetup2b2.setMaxFontHeight(10)
+    animationBoot()
 }
 function setup () {
     debugTerminal(4000)
@@ -131,22 +131,40 @@ function setup () {
         }
     })
 }
+function setupBoot2 () {
+    game.showLongText("Your device is SolarLINK compatible.", DialogLayout.Bottom)
+    game.showLongText("SolarLINK is an efficient wirless networking protocol made specifically for SolarUI.", DialogLayout.Bottom)
+    game.showLongText("SolarLINK enables wireless connection to a compatible external Nexus AI server and encrypted RSS Texting.", DialogLayout.Bottom)
+    game.showLongText("You can turn on SolarLINK after setup.", DialogLayout.Bottom)
+    game.showLongText("\"The Impossible is Now Possible\"", DialogLayout.Bottom)
+    game.showLongText("Nexus AI on SolarUI Core runs Intelligence 4.5 Nano; our most powerful Generative SLM AI Assistant.", DialogLayout.Bottom)
+    game.showLongText("Nexus AI can understand user intent and can generate a response using natural language.", DialogLayout.Bottom)
+    game.showLongText("Nexus AI understands user intent with a 99% processing accuracy, enabled by our 4.8K parameter, triple layer Dedicated Response Engine.", DialogLayout.Bottom)
+    game.showLongText("By running Nexus AI on our Solar Private Compute, you can be confident that you stay in control of your data.", DialogLayout.Bottom)
+    game.showLongText("Privacy is a human right, so we never will perform any machine learning on your conversations.", DialogLayout.Bottom)
+    game.showLongText("Nexus AI connects via SolarLINK for high-performance output.", DialogLayout.Bottom)
+    game.showLongText("You can connect to a Solar Private Compute after setup.", DialogLayout.Bottom)
+    game.showLongText("Finally, let's set up your SolarID for SolarUI Core; which is kept encrypted, on device only.", DialogLayout.Bottom)
+    blockSettings.writeString("solarIdName", game.askForString("What would you like us to call you?", 12, true))
+    game.showLongText("Welcome to SolarUI Core, " + blockSettings.readString("solarIdName") + ". Your device will reboot to apply changes.", DialogLayout.Bottom)
+    blockSettings.writeNumber("bootSetupStatus", 1)
+}
 let setupMenu1: miniMenu.MenuSprite = null
 let textSetup2c2: TextSprite = null
 let textSetup12: TextSprite = null
 let textSetup2b2: TextSprite = null
 let userInput = ""
+let animationBoot1: Sprite = null
 let systemCursor: Sprite = null
 let systemCursorPointer: Sprite = null
-let animationBoot1: Sprite = null
+let systemPinLength = 0
 let maxColor = 0
 let bgColor = 0
 let textSetup2a2 = null
-let userInput2 = ""
 if (blockSettings.readNumber("bootSetupStatus") == 1) {
     boot()
 } else if (blockSettings.readNumber("bootSetupStatus") == 2) {
-    setupBoot()
+    setupBoot1()
 } else {
     setup()
 }
